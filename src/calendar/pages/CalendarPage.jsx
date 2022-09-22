@@ -3,10 +3,10 @@ import { addHours } from 'date-fns';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Navbar, CalendarEventBox, CalendarModal } from "../"
 import { localizer, getMessagesES } from '../../helpers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUiStore } from '../../hooks';
 import { useCalendarStore } from '../../hooks/useCalendarStore';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { onSetActiveEvent } from '../../store';
 import { FabNewEvent } from '../components/FabNewEvent';
 import { FabDeleteEvent } from '../components/FabDeleteEvent';
@@ -14,18 +14,25 @@ import { FabDeleteEvent } from '../components/FabDeleteEvent';
  
 export const CalendarPage = () => {
 
+  const { user } = useSelector(state => state.auth);
+  console.log('User id: ',user)
+
   const { openDateModal } = useUiStore();
 
   const dispatch = useDispatch();
 
-  const { events, activeEvent, setActiveEvent, hasEventSelected } = useCalendarStore();
+  const { events, activeEvent, setActiveEvent, startLoadingEvents,hasEventSelected } = useCalendarStore();
 
-  const [lastView, setLastView] = useState( localStorage.getItem('lastView') || 'week')
+  const [lastView, setLastView] = useState( localStorage.getItem('lastView') || 'week');
+
+  useEffect(() => {
+    startLoadingEvents();
+  }, [])
   
   const eventStyleGetter = ( event, start, end, isSelected) =>{
-
+    const isMyEvent = (event.user._id === user.uid) || (event.user.uid === user.uid) 
     const style = {
-      backgroundColor : '#347CF7',
+      backgroundColor : isMyEvent ? '#347CF7':'#465660',
       borderRadius : '0px',
       opacity: '0.8',
       color:'white'
@@ -39,7 +46,7 @@ export const CalendarPage = () => {
     openDateModal();
   }
   const onSelect = (event) =>{
-    console.log({select:event})
+    dispatch(onSetActiveEvent(event))
   }
   const onChangeView = (event) =>{
     localStorage.setItem('lastView',event)
@@ -49,6 +56,7 @@ export const CalendarPage = () => {
   const onNewEvent = ()=>{
     console.log('New Event...')
   }
+
 
   return (
     <>

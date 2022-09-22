@@ -90,7 +90,7 @@ export const CalendarModal = () => {
             return;
         }
 
-        Swal.fire('Succes!','The new evet was added.','success')
+        // Swal.fire('Succes!','The new evet was added.','success')
         console.log('FormValue =====>>>',formValues)
         await startSavingEvent(formValues)
         closeDateModal();
