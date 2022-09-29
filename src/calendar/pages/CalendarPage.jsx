@@ -79,7 +79,7 @@ export const CalendarPage = () => {
       onView={onChangeView}
     />
     <CalendarModal/>
-    <FabDeleteEvent show={hasEventSelected}/>
+    <FabDeleteEvent />
     <FabNewEvent/>
     </>
   )
