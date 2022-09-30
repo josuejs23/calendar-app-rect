@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { useMemo } from "react";
 import { useUiStore, useCalendarStore } from "../../hooks";
 import { useSelector } from "react-redux";
+import { getEnvVariables } from "../../helpers";
 // import 'sweetalert2/dist/sweetalert2.min.css'
 
 registerLocale('es', es)
@@ -24,7 +25,9 @@ const customStyles = {
     },
 };
 
-Modal.setAppElement('#root');
+if(getEnvVariables().VITE_MODE !=='test'){
+    Modal.setAppElement('#root');
+}
 
 export const CalendarModal = () => {
 
